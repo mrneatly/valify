@@ -66,7 +66,9 @@ class ExampleValidator extends AbstractValidator {
      * @param $value
      */
     protected function validateValue($value) {
-        $this->addError('Example error');
+        // Set an error message with some params:
+        $this->addError('Example error; Called at: {time}', ['{time}'=>date('H:i')]);
+
         // Your validation code here
     }
 }

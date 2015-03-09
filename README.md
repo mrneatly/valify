@@ -21,7 +21,8 @@ use valify\Validator;
 
 Now you are ready to validate your data.
 
-*In case your app is MVC-based, here is a little hint for you:*
+### In case your app is MVC-based, here is a little hint for you:
+
 You can implement your own methods in base model class (which will be some kind of wrapper).
 Please investigate example below:
 
@@ -62,7 +63,7 @@ class Model {
 The usage is similar to Yii2 input validation.
 
 ### Prepare data
-- Define the rules for each incoming value:
+- Define the rules for each incoming value
 
 ```php
 $rules = [
@@ -72,14 +73,23 @@ $rules = [
 ];
 ```
 
-You cat also implement your own validators, by extending valify\validator\AbstractValidator class. 
+Each validator accepts a `message` param, which should contain an error message as string.
+You can access attribute name and value in `message`, by using so-called 'paterns':
+
+```php
+['email', 'email', 'message'=>'{value} for {attribute} is not a valid email'],
+```
+
+*NB! In case you want to show value in error message, you must check if it can be represented as string.* 
+
+You cat also implement your own validators by extending valify\validator\AbstractValidator class. 
 In this case, you should import (require) AbstractValidator also.
 To use own validator in rules, just define validator namespace in validator name:
 
 ```php
 $rules = [
     /* ... */
-    ['email', '\\example\\ExampleValidator']
+    ['email', '\\example\\ExampleValidator', 'ownProperty'=>'abc' /* ... */]
     /* ... */
 ];
 ```
@@ -87,7 +97,7 @@ $rules = [
 Do not forget to import your validator before defining it in rules.
 Refer to the valify\validators\ExampleValidator for detailed implementation info.
 
-- Define the data to be validated:
+- Define the data to be validated
 
 ```php
 $data = [
@@ -98,42 +108,45 @@ $data = [
 ];
 ```
 
-- Set rules and data:
+- Set rules and data
 
 ```php
+$validator = new Validator();
 $validator = $validator->setRules($rules)->loadData($data)
 ```
 
-You can call `setrules()` and `loadData()` as much times as you want:
+You can call `setrules()` and `loadData()` multiple times:
 
 ```php
+$validator = new Validator();
 $validator = $validator
                 ->setRules([...])
-                ->setRules([...])
-                ->setRules([...])
                 ->loadData([...])
+                ->setRules([...])
+                ->setRules([...])
                 ->loadData([...])
                 ->loadData([...]);
 ```
 
 ### Validate
-- Execute validation wherever you want:
+- Execute validation
 
 ```php
 $isValid = $validator->validate();
 ```
 
-You can perform a validation for a single value, without calling `setRules()` and `loadData()`:
+You can perform a validation for a single value (without calling `setRules()` and `loadData()`):
 
 ```php
+$validator = new Validator();
 $password = $_POST['password'];
 $validator->validateFor('password', $password, ['min'=>6, 'max'=>20]);
 ```
 
-In this case, `validateFor()` will return the same result as `validate()` method.
+In this case, `validateFor()` will return result of `validate()` method.
 
 ### Get results
-- After that, you can get an array with error messages:
+- Get an array with error messages
  
 ```php
 if($validator->hasErrors()) {
@@ -141,7 +154,7 @@ if($validator->hasErrors()) {
 }
 ```
 
-You can get an error message for a single attribute:
+You can also get an error message for a single attribute:
 
 ```php
 $errorMsgForUserAttr = $validator->getError('username');
@@ -151,5 +164,7 @@ $errorMsgForUserAttr = $validator->getError('username');
 * boolean
 * email
 * string
+
+For detailed parameter description of each validator, see class methods in valify/validators.
 
 All bug and issue reports are welcome as improvement proposals. Enjoy.
