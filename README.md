@@ -167,4 +167,4 @@ $errorMsgForUserAttr = $validator->getError('username');
 
 For detailed parameter description of each validator, see class methods in valify/validators.
 
-All bug and issue reports are welcome as improvement proposals. Enjoy.
+All bug and issue reports are welcome as well as improvement proposals. Enjoy.
