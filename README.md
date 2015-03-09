@@ -80,7 +80,7 @@ You can access attribute name and value in `message`, by using so-called 'patter
 ['email', 'email', 'message'=>'{value} for {attribute} is not a valid email'],
 ```
 
-*NB! In case you want to show value in error message, you must check if it can be represented as a string.* 
+*NB! In case you want to show value in error message, you must check first if it can be represented as a string.* 
 
 You cat also implement your own validators by extending `valify\validator\AbstractValidator` class. 
 In this case you should import (require) AbstractValidator also.
