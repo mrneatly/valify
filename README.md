@@ -140,7 +140,7 @@ You can perform a single value validation (without calling `setRules()` and `loa
 ```php
 $validator = new Validator();
 $password = $_POST['password'];
-$validator->validateFor('password', $password, ['min'=>6, 'max'=>20]);
+$isValid = $validator->validateFor('password', $password, ['min'=>6, 'max'=>20]);
 ```
 
 In this case, `validateFor()` will return result of `validate()` method.
