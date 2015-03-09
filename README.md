@@ -21,10 +21,10 @@ use valify\Validator;
 
 Now you are ready to validate your data.
 
-### In case your app is MVC-based, here is a little hint for you:
+### In case you have a MVC-based app, here is a little hint for you:
 
-You can implement your own methods in base model class (which will be some kind of wrapper).
-Please investigate example below:
+You can implement your own methods in base model class.
+Please investigate an example below:
 
 ```php
 class Model {
@@ -60,7 +60,7 @@ class Model {
 ```
 
 ## Usage
-The usage is similar to Yii2 input validation.
+Usage is similar to [Yii2 input validation](https://github.com/yiisoft/yii2/blob/master/docs/guide/input-validation.md).
 
 ### Prepare data
 - Define the rules for each incoming value
@@ -73,17 +73,17 @@ $rules = [
 ];
 ```
 
-Each validator accepts a `message` param, which should contain an error message as string.
-You can access attribute name and value in `message`, by using so-called 'paterns':
+Each validator accepts a `message` parameter, which should contain an error message as string.
+You can access attribute name and value in `message`, by using so-called 'patterns':
 
 ```php
 ['email', 'email', 'message'=>'{value} for {attribute} is not a valid email'],
 ```
 
-*NB! In case you want to show value in error message, you must check if it can be represented as string.* 
+*NB! In case you want to show value in error message, you must check if it can be represented as a string.* 
 
-You cat also implement your own validators by extending valify\validator\AbstractValidator class. 
-In this case, you should import (require) AbstractValidator also.
+You cat also implement your own validators by extending `valify\validator\AbstractValidator` class. 
+In this case you should import (require) AbstractValidator also.
 To use own validator in rules, just define validator namespace in validator name:
 
 ```php
@@ -94,8 +94,8 @@ $rules = [
 ];
 ```
 
-Do not forget to import your validator before defining it in rules.
-Refer to the valify\validators\ExampleValidator for detailed implementation info.
+Do not forget to import your validator before defining s namespace in rules.
+Refer to the `valify\validators\ExampleValidator` for detailed implementation info.
 
 - Define the data to be validated
 
@@ -135,7 +135,7 @@ $validator = $validator
 $isValid = $validator->validate();
 ```
 
-You can perform a validation for a single value (without calling `setRules()` and `loadData()`):
+You can perform a single value validation (without calling `setRules()` and `loadData()`):
 
 ```php
 $validator = new Validator();
@@ -154,7 +154,7 @@ if($validator->hasErrors()) {
 }
 ```
 
-You can also get an error message for a single attribute:
+You can also get an error message of a single attribute:
 
 ```php
 $errorMsgForUserAttr = $validator->getError('username');
@@ -166,5 +166,10 @@ $errorMsgForUserAttr = $validator->getError('username');
 * string
 
 For detailed parameter description of each validator, see class methods in valify/validators.
+
+## Testing
+In order to properly run unit tests, run them under `tests` directory.
+
+
 
 All bug and issue reports are welcome as well as improvement proposals. Enjoy.
