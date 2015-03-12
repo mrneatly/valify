@@ -43,13 +43,17 @@ abstract class AbstractValidator {
     }
 
     /**
-     * Fetching errors from particular validator
+     * Fetching errors for a particular validator
      * @return array
      */
     public function fetchErrors() {
         return $this->_errors;
     }
 
+    /**
+     * Does current validator got any errors
+     * @return bool
+     */
     public function gotErrors() {
         return !empty($this->_errors);
     }

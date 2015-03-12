@@ -31,24 +31,12 @@ class StringValidator extends AbstractValidator {
      */
     public $min;
 
-    /**
-     * @var string user-defined error message used when the length of the value is not equal to [[length]].
-     */
     public $notEqual = '{value} is not equal to {length}';
 
-    /**
-     * @var string user-defined error message used when the length of the value is greater than [[max]].
-     */
     public $tooLong = '{attribute} should not exceed {max} chars';
 
-    /**
-     * @var string user-defined error message used when the length of the value is smaller than [[min]].
-     */
     public $tooShort = '{attribute} should not be shorter than {min} chars';
 
-    /**
-     * $encoding = 'UTF-8';
-     */
     public $encoding = 'UTF-8';
 
 
