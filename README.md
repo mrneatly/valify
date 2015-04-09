@@ -21,12 +21,15 @@ use valify\Validator;
 
 Now you are ready to validate your data.
 
-### In case you have a MVC-based app, here is a little hint for you:
+### Hint for a MVC pattern users
 
 You can implement your own methods in base model class.
 Please investigate an example below:
 
 ```php
+
+use valify\Validator;
+
 class Model {
     /* ... */
     
@@ -62,7 +65,7 @@ class Model {
 ## Usage
 Usage is similar to [Yii2 input validation](https://github.com/yiisoft/yii2/blob/master/docs/guide/input-validation.md).
 
-### Prepare data
+### Set rules and load user input
 - Define the rules for each incoming value
 
 ```php
@@ -94,10 +97,12 @@ $rules = [
 ];
 ```
 
-Do not forget to import your validator before defining s namespace in rules.
+Do not forget to import your validator before defining a namespace in rules.
 Refer to the `valify\validators\ExampleValidator` for detailed implementation info.
 
 - Define the data to be validated
+
+Expecting input data in next format:
 
 ```php
 $data = [
@@ -145,7 +150,7 @@ $isValid = $validator->validateFor('password', $password, ['min'=>6, 'max'=>20])
 
 In this case, `validateFor()` will return result of `validate()` method.
 
-### Get results
+### Fetch errors
 - Get an array with error messages
  
 ```php
