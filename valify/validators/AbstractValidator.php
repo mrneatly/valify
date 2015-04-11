@@ -3,13 +3,14 @@
 namespace valify\validators;
 
 abstract class AbstractValidator {
+    public $allowEmpty = true;
     protected $attribute;
-    private $_value;
+    protected $_value;
     private $_errors = [];
 
     function __construct($attribute, $value) {
         $this->attribute = $attribute;
-        $this->_value = $value;
+        $this->_value    = $value;
     }
 
     /**
@@ -17,8 +18,9 @@ abstract class AbstractValidator {
      * Yes, some errors may be set in the init() method
      */
     public function init() {
-        if( !$this->gotErrors() )
+        if( !$this->gotErrors() && ( !$this->allowEmpty || ( $this->allowEmpty && !$this->isEmpty($this->_value) ) ) ) {
             $this->validateValue($this->_value);
+        }
     }
 
     /**
@@ -33,9 +35,11 @@ abstract class AbstractValidator {
      * @param array $params
      */
     protected function addError($msg, $params = []) {
+        $value = $this->isEchoable($this->_value) ? $this->_value : '';
+
         $params = array_merge([
             '{attribute}' => $this->attribute,
-            '{value}' => $this->_value,
+            '{value}'     => $value,
         ], $params);
         $msg = str_replace(array_keys($params), array_values($params), $msg);
 
@@ -56,6 +60,29 @@ abstract class AbstractValidator {
      */
     public function gotErrors() {
         return !empty($this->_errors);
+    }
+
+    public function isEchoable($value) {
+        return (is_string($value) || is_numeric($value));
+    }
+
+    public function isEmpty($value) {
+        $empty = true;
+
+        if (is_string($value) || is_numeric($value)) {
+            $empty = empty($value);
+        } elseif(is_object($value)) {
+            $empty = $this->isEmpty(get_object_vars($value));
+        } elseif(is_array($value)) {
+            foreach ($value as $key => $val) {
+                if(!$this->isEmpty($val)) {
+                    $empty = false;
+                    break;
+                }
+            }
+        }
+
+        return $empty;
     }
 
     abstract protected function validateValue($value);

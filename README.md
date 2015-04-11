@@ -175,6 +175,6 @@ For detailed parameter description of each validator, see class methods in valif
 ## Testing
 In order to properly run unit tests, run them under `tests` directory.
 
-
+Check index.php in examples folder to view framework in action.
 
 All bug and issue reports are welcome as well as improvement proposals. Enjoy.

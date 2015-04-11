@@ -118,7 +118,7 @@ class Validator {
             }
         }
 
-        return $this->hasErrors();
+        return !$this->hasErrors();
     }
 
     /**
@@ -127,15 +127,14 @@ class Validator {
      * @return bool
      */
     public function hasErrors() {
-        return empty($this->_errors);
+        return !empty($this->_errors);
     }
 
     /**
      * @return array
      */
-    public function getErrors() {
-        // Prepare output here
-        return $this->_errors;
+    public function getErrors($attribute = null) {
+        return isset($this->_errors[$attribute]) ? $this->_errors[$attribute] : $this->_errors;
     }
 
     /**
@@ -144,7 +143,7 @@ class Validator {
      * @return array|null
      */
     public function getError($attribute = null) {
-        return isset($this->_errors[$attribute]) ? $this->_errors[$attribute] : null;
+        return isset($this->_errors[$attribute]) ? $this->_errors[$attribute][0] : null;
     }
 
     /**
@@ -172,7 +171,7 @@ class Validator {
 
             $validator->init();
             if( $validator->gotErrors() )
-                $this->setError($validator->fetchErrors());
+                $this->setErrorStack($validator->fetchErrors());
         } else {
             throw new \Exception("Validator $validatorName not found");
         }
@@ -185,8 +184,8 @@ class Validator {
         return $obj;
     }
 
-    private function setError($errors) {
-        foreach ($errors as $attr => $msg)
-            $this->_errors[$attr] = $msg;
+    private function setErrorStack($errors) {
+        foreach ($errors as $attr => $msgs)
+            $this->_errors[$attr] = $msgs;
     }
 }
