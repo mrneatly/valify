@@ -5,7 +5,7 @@ use valify\Validator;
 require '../valify/Validator.php';
 $validator = new Validator();
 
-//require 'example/ExampleValidator.php';
+//require 'examples/ExampleValidator.php';
 
 $rules = [
     ['username', 'required'],
@@ -13,7 +13,7 @@ $rules = [
     ['email', 'email', 'message'=>'Please provide a valid email'],
     ['remember_me', 'boolean'],
     ['file', 'file', 'minSize'=>10000, 'maxFiles'=>2, 'extensions'=>['jpg'], 'checkExtensionByMimeType'=>false]
-//    ['email', '\\example\\ExampleValidator']
+//    ['email', '\\examples\\ExampleValidator']
 ];
 
 if(!empty($_POST)) {

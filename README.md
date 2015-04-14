@@ -92,7 +92,7 @@ To use own validator in rules, just define validator namespace in validator name
 ```php
 $rules = [
     /* ... */
-    ['email', '\\example\\ExampleValidator', 'ownProperty'=>'abc' /* ... */]
+    ['email', '\\examples\\ExampleValidator', 'ownProperty'=>'abc' /* ... */]
     /* ... */
 ];
 ```

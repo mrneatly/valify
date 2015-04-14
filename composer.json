@@ -1,0 +1,16 @@
+{
+  "name": "xphoenyx/valify",
+  "type": "library",
+  "description": "A little framework for user input validation",
+  "keywords": ["validation", "validator", "validate"],
+  "homepage": "https://github.com/xphoenyx/valify",
+  "authors": [
+    {
+      "email": "0xphoenyx0@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0"
+  }
+}

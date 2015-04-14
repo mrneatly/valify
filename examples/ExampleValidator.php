@@ -1,18 +1,18 @@
 <?php
 
-namespace example;
+namespace examples;
 
 use \valify\validators\AbstractValidator;
 
 /**
  * An example class, constructed to give an image of how to make own validator.
  * By using own validator, in rules, define validator name as a namespace:
- $rules = [
-    ['email', '\\example\\ExampleValidator']
- ];
+ * $rules = [
+ *    ['email', '\\examples\\ExampleValidator']
+ * ];
  *
  * Class ExampleValidator
- * @package example
+ * @package examples
  */
 class ExampleValidator extends AbstractValidator {
 

@@ -27,11 +27,6 @@ class Validator {
         'url'      => '\valify\validators\UrlValidator',
     ];
 
-    function __construct() {
-        if( version_compare(PHP_VERSION, '5.4.0', '<') )
-            throw new \Exception("You must use PHP version 5.4.0 or above");
-    }
-
     /**
      * You can perform a single validation by using this method.
      * Result of validate() method (boolean) will be returned.
