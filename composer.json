@@ -4,6 +4,7 @@
   "description": "A little framework for user input validation",
   "keywords": ["validation", "validator", "validate"],
   "homepage": "https://github.com/xphoenyx/valify",
+  "license": "MIT",
   "authors": [
     {
       "email": "0xphoenyx0@gmail.com",
