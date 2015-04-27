@@ -1,11 +1,17 @@
 <?php
+/**
+ * This is fully-working example, showing how to use framework in action.
+ * You can copy the content of this file and use it in a bootstrap script in your project,
+ * or paste it in any other file that can be executed directly from the browser.
+ * But don't try to execute this file itself :)
+ */
 
 use valify\Validator;
 
-require '../valify/Validator.php';
+require 'vendor/Autoload.php';
 $validator = new Validator();
 
-//require 'examples/ExampleValidator.php';
+// require "your/own/path/to/ValidatorClass.php";
 
 $rules = [
     ['username', 'required'],
@@ -13,7 +19,7 @@ $rules = [
     ['email', 'email', 'message'=>'Please provide a valid email'],
     ['remember_me', 'boolean'],
     ['file', 'file', 'minSize'=>10000, 'maxFiles'=>2, 'extensions'=>['jpg'], 'checkExtensionByMimeType'=>false]
-//    ['email', '\\examples\\ExampleValidator']
+//    ['email', 'your\\own\\namespace\\ValidatorClass']
 ];
 
 if(!empty($_POST)) {

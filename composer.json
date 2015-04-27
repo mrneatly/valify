@@ -7,11 +7,20 @@
   "license": "MIT",
   "authors": [
     {
+      "name": "Pavel Borunov",
       "email": "0xphoenyx0@gmail.com",
       "role": "Developer"
     }
   ],
   "require": {
     "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "valify\\": "valify"
+    }
   }
 }

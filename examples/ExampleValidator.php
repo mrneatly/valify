@@ -5,8 +5,9 @@ namespace examples;
 use \valify\validators\AbstractValidator;
 
 /**
- * An example class, constructed to give an image of how to make own validator.
- * By using own validator, in rules, define validator name as a namespace:
+ * This class is constructed only for investigation purposes,
+ * to give a more clear image of how to implement own validators.
+ * Using own validator, define validator name in rules as a namespace:
  * $rules = [
  *    ['email', '\\examples\\ExampleValidator']
  * ];

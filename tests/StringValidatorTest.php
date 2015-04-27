@@ -1,10 +1,6 @@
 <?php
 
-namespace tests;
-
 use valify\Validator;
-
-require_once '../valify/Validator.php';
 
 class StringValidatorTest extends \PHPUnit_Framework_TestCase {
     private $validator;
