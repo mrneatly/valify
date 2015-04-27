@@ -19,6 +19,11 @@ Framework uses namespaces, so add next line to the top of file, where validator 
 use valify\Validator;
 ```
 
+There is also a more straightforward way to install this framework through the compser.
+In your project root, issue next:
+
+`php composer.phar require xphoenyx/valify 1.5.1`
+
 Now you are ready to validate your data.
 
 ### Hint for a MVC pattern users
@@ -173,8 +178,10 @@ $errorMsgForUserAttr = $validator->getError('username');
 For detailed parameter description of each validator, see class methods in valify/validators.
 
 ## Testing
-In order to properly run unit tests, run them under `tests` directory.
+In order to properly run unit tests, you need to specify path to the composer autoloader file.
+Then you just issue the `phpunit` command under `valify` (component root) directory.
 
+## Examples
 Check index.php in examples folder to view framework in action.
 
 All bug and issue reports are welcome as well as improvement proposals. Enjoy.
