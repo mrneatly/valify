@@ -20,7 +20,7 @@ use valify\Validator;
 ```
 
 There is also a more straightforward way to install this framework through the compser.
-In your project root, issue next:
+In your project root, issue next command in terminal:
 
 `php composer.phar require xphoenyx/valify 1.5.1`
 
@@ -71,7 +71,7 @@ class Model {
 Usage is similar to [Yii2 input validation](https://github.com/yiisoft/yii2/blob/master/docs/guide/input-validation.md).
 
 ### Set rules and load user input
-- Define the rules for each incoming value
+#### Define rules for each incoming value
 
 ```php
 $rules = [
@@ -81,18 +81,18 @@ $rules = [
 ];
 ```
 
-Each validator accepts a `message` parameter, which should contain an error message as string.
-You can access attribute name and value in `message`, by using so-called 'patterns':
+Each validator accepts `message` parameter, which should contain an error message as string.
+You can access attribute name and its value in `message` by using so-called 'patterns':
 
 ```php
-['email', 'email', 'message'=>'{value} for {attribute} is not a valid email'],
+['email', 'email', 'message'=>'{value} for attribute "{attribute}" is not a valid email'],
 ```
 
 *NB! In case you want to show value in error message, you must check first if it can be represented as a string.* 
 
 You can also implement your own validators by extending `valify\validator\AbstractValidator` class. 
-In this case you should import (require) AbstractValidator also.
-To use own validator in rules, just define validator namespace in validator name:
+In this case, if you are not using composer autoloader, you should also import (require) AbstractValidator.
+To use own validator in rules, just define validator namespace as a validator name:
 
 ```php
 $rules = [
@@ -105,9 +105,9 @@ $rules = [
 Do not forget to import your validator before defining a namespace in rules.
 Refer to the `valify\validators\ExampleValidator` for detailed implementation info.
 
-- Define the data to be validated
+#### Define the data to be validated
 
-Expecting input data in next format:
+Input data is expected in next format:
 
 ```php
 $data = [
@@ -118,7 +118,7 @@ $data = [
 ];
 ```
 
-- Set rules and data
+#### Set rules and data
 
 ```php
 $validator = new Validator();
@@ -139,13 +139,13 @@ $validator = $validator
 ```
 
 ### Validate
-- Execute validation
+#### Execute validation
 
 ```php
 $isValid = $validator->validate();
 ```
 
-You can perform a single value validation (without calling `setRules()` and `loadData()`):
+You have an ability to perform a single value validation, without calling `setRules()` and `loadData()`:
 
 ```php
 $validator = new Validator();
@@ -156,7 +156,7 @@ $isValid = $validator->validateFor('password', $password, ['min'=>6, 'max'=>20])
 In this case, `validateFor()` will return result of `validate()` method.
 
 ### Fetch errors
-- Get an array with error messages
+#### Get an array with error messages
  
 ```php
 if($validator->hasErrors()) {
@@ -170,18 +170,22 @@ You can also get an error message of a single attribute:
 $errorMsgForUserAttr = $validator->getError('username');
 ```
 
+As each attribute can have a few error messages, `getError()` will give you 
+the last message of the corresponding attribute error stack (array).
+
 ## List of built-in validators:
 * boolean
 * email
+* file
 * string
 
 For detailed parameter description of each validator, see class methods in valify/validators.
 
 ## Testing
 In order to properly run unit tests, you need to specify path to the composer autoloader file.
-Then you just issue the `phpunit` command under `valify` (component root) directory.
+Then you just issue the `phpunit` command in terminal under `valify` (component root) directory.
 
 ## Examples
-Check index.php in examples folder to view framework in action.
+Check index.php in `examples` directory to view framework in action.
 
 All bug and issue reports are welcome as well as improvement proposals. Enjoy.
