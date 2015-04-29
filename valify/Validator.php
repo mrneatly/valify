@@ -93,20 +93,17 @@ class Validator {
      * @return bool
      */
     public function validate() {
-        $data = $this->_data;
-        $rules = $this->_rules;
+        foreach ($this->_rules as $rule) {
+            $attribute = array_shift($rule);
+            $validatorName = array_shift($rule);
 
-        foreach ($data as $attr => $value) {
-            foreach ($rules as $rule) {
-                $ruleItems = array_values($rule);
-
-                if( is_string($ruleItems[0]) && $ruleItems[0] == $attr ) {
-                    $this->callValidator($value, $rule);
-                } elseif( is_array($ruleItems[0]) && in_array($attr, $ruleItems[0]) ) {
-                    // Replace first value from array to string
-                    array_shift($rule);
-                    array_unshift($rule, $attr);
-                    $this->callValidator($value, $rule);
+            if($validatorName) {
+                if( is_string($attribute) ) {
+                    $value = isset($this->_data[$attribute]) ? $this->_data[$attribute] : null;
+                    $this->callValidator($validatorName, [$attribute => $value], $rule);
+                } elseif( is_array($attribute) ) {
+                    $safeData = array_intersect_key( $this->_data, array_flip($attribute) );
+                    $this->callValidator($validatorName, $safeData, $rule);
                 }
             }
         }
@@ -139,32 +136,29 @@ class Validator {
         return isset($this->_errors[$attribute]) ? $this->_errors[$attribute][0] : null;
     }
 
-    /**
-     * @param array $rule
-     */
-    private function callValidator($value, $rule = []) {
-        $attribute = array_shift($rule);
-        $validatorName = array_shift($rule);
-
-        if( isset($this->_builtInValidators[$validatorName]) ) {
-            $namespace = $this->_builtInValidators[$validatorName];
-            $validator = new $namespace($attribute, $value);
-        } elseif( strpos($validatorName, '\\') !== false ) { # Means that validator name is matched as a namespace
-            $validator = new $validatorName($attribute, $value);
+    private function callValidator($validator, $data, $rule = []) {
+        if( isset($this->_builtInValidators[$validator]) ) {
+            $namespace = $this->_builtInValidators[$validator];
+            $validator = new $namespace();
+        } elseif( strpos($validator, '\\') !== false ) { # Validator name is matched as a namespace
+            $validator = new $validator();
 
             if( !is_subclass_of($validator, '\valify\validators\AbstractValidator', false) )
-                throw new \Exception("Validator $validatorName must extend \\valify\\validators\\AbstractValidator class");
+                throw new \Exception("Validator " . get_class($validator) . " must extend \\valify\\validators\\AbstractValidator class");
         }
 
-        if( isset($validator) ) {
+        if( is_object($validator) ) {
             /** @var $validator validators\AbstractValidator */
             $validator = $this->setValidatorProperties($validator, $rule);
 
-            $validator->init();
-            if( $validator->gotErrors() )
-                $this->setErrorStack($validator->fetchErrors());
+            foreach ($data as $attr => $val) {
+                $validator->setAttributeAndValue($attr, $val);
+                $validator->init();
+                if( $validator->gotErrors() )
+                    $this->setErrorStack($validator->fetchErrors());
+            }
         } else {
-            throw new \Exception("Validator $validatorName not found");
+            throw new \Exception("Validator " . get_class($validator) . " not found");
         }
     }
 

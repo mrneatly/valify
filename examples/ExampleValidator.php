@@ -34,12 +34,16 @@ class ExampleValidator extends AbstractValidator {
      * parent constructor will be executed anyway.
      * NB! Defining constructor params and calling
      * parent constructor before your logic is required.
-     *
-     * @param $attribute
-     * @param $value
+     * Also, although you are able to access 'attribute'
+     * and 'value' parent properties here, it is highly recommended
+     * to deal with them only in validateValue() method,
+     * because sometimes their values may be modified before
+     * method validateValue() is called.
+     * See \valify\validators\AbstractValidator::setAttributeAndValue()
+     * method description for more info.
      */
-    function __construct($attribute, $value) {
-        parent::__construct($attribute, $value);
+    function __construct() {
+        parent::__construct();
         // Your code here
     }
 
@@ -48,7 +52,7 @@ class ExampleValidator extends AbstractValidator {
      * right after validator constructor.
      * For example, you can define extra object properties,
      * or modify predefined ones.
-     * It is completely safe to remove this method from here -
+     * It is completely safe to omit overriding this method -
      * parent init() method will be executed anyway.
      * NB! Parent init() method call after your logic is required.
      */
@@ -67,7 +71,7 @@ class ExampleValidator extends AbstractValidator {
      * @param $value
      */
     protected function validateValue($value) {
-        // Set an error message with some params:
+        // Set an error message with some params (you can call addError() as many times as you want):
         $this->addError('Example error; Called at: {time}', ['{time}'=>date('H:i')]);
 
         // Your validation code here

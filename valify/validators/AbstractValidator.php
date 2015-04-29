@@ -5,12 +5,28 @@ namespace valify\validators;
 abstract class AbstractValidator {
     public $allowEmpty = true;
     protected $attribute;
-    protected $_value;
+    protected $value;
     private $_errors = [];
 
-    function __construct($attribute, $value) {
+    /**
+     * Although constructor is empty right now,
+     * it may be useful in future.
+     */
+    function __construct() {}
+
+    /**
+     * For better performance purposes, object of each validator
+     * is created once, but can accept attribute => value pairs.
+     * This is made to avoid creating validator object from scratch
+     * for each value. In order to correctly handle each pair,
+     * only this and init() methods are called in cycle.
+     *
+     * @param $attribute
+     * @param $value
+     */
+    public function setAttributeAndValue($attribute, $value) {
         $this->attribute = $attribute;
-        $this->_value    = $value;
+        $this->value    = $value;
     }
 
     /**
@@ -18,8 +34,8 @@ abstract class AbstractValidator {
      * Yes, some errors may be set in the init() method
      */
     public function init() {
-        if( !$this->gotErrors() && ( !$this->allowEmpty || ( $this->allowEmpty && !$this->isEmpty($this->_value) ) ) ) {
-            $this->validateValue($this->_value);
+        if( !$this->gotErrors() && ( !$this->allowEmpty || ( $this->allowEmpty && !$this->isEmpty($this->value) ) ) ) {
+            $this->validateValue($this->value);
         }
     }
 
@@ -35,7 +51,7 @@ abstract class AbstractValidator {
      * @param array $params
      */
     protected function addError($msg, $params = []) {
-        $value = $this->isEchoable($this->_value) ? $this->_value : '';
+        $value = $this->isEchoable($this->value) ? $this->value : '';
 
         $params = array_merge([
             '{attribute}' => $this->attribute,
