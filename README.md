@@ -22,7 +22,7 @@ use valify\Validator;
 There is also a more straightforward way to install this framework through the compser.
 In your project root, issue next command in terminal:
 
-`php composer.phar require xphoenyx/valify 1.5.1`
+`php composer.phar require xphoenyx/valify 1.5.2`
 
 Now you are ready to validate your data.
 
@@ -174,6 +174,7 @@ the last message of the corresponding attribute error stack (array).
 * boolean
 * email
 * file
+* required
 * string
 
 For detailed parameter description of each validator, see class methods in valify/validators.
