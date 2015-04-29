@@ -59,11 +59,11 @@ class Validator {
      */
     public function setRules($rules = []) {
         if( !is_array($rules) )
-            throw new \Exception("Rules must be provided as an array");
+            throw new \InvalidArgumentException("Rules must be provided as an array");
 
         foreach ($rules as $rule) {
             if( !is_array($rule) )
-                throw new \Exception("Every rule must be provided as an array");
+                throw new \UnexpectedValueException("Every rule must be provided as an array");
         }
 
         //TODO Rules could be set in JSON
@@ -81,7 +81,7 @@ class Validator {
      */
     public function loadData($data = []) {
         if( !is_array($data) )
-            throw new \Exception("Data must be provided as an array");
+            throw new \InvalidArgumentException("Data must be provided as an array");
 
         //TODO Data could be set in JSON
 
@@ -144,7 +144,7 @@ class Validator {
             $validator = new $validator();
 
             if( !is_subclass_of($validator, '\valify\validators\AbstractValidator', false) )
-                throw new \Exception("Validator " . get_class($validator) . " must extend \\valify\\validators\\AbstractValidator class");
+                throw new \DomainException("Validator " . get_class($validator) . " must extend \\valify\\validators\\AbstractValidator class");
         }
 
         if( is_object($validator) ) {
@@ -158,7 +158,7 @@ class Validator {
                     $this->setErrorStack($validator->fetchErrors());
             }
         } else {
-            throw new \Exception("Validator " . get_class($validator) . " not found");
+            throw new \UnexpectedValueException("Validator " . get_class($validator) . " not found");
         }
     }
 
