@@ -70,8 +70,7 @@ class Model {
 ## Usage
 Usage is similar to [Yii2 input validation](https://github.com/yiisoft/yii2/blob/master/docs/guide/input-validation.md).
 
-### Set rules and load user input
-#### Define rules for each incoming value
+### Define rules
 
 ```php
 $rules = [
@@ -105,7 +104,7 @@ $rules = [
 Do not forget to import your validator before defining a namespace in rules.
 Refer to the `valify\validators\ExampleValidator` for detailed implementation info.
 
-#### Define the data to be validated
+### Define data to be validated
 
 Input data is expected in next format:
 
@@ -118,7 +117,7 @@ $data = [
 ];
 ```
 
-#### Set rules and data
+### Set rules and data
 
 ```php
 $validator = new Validator();
@@ -138,8 +137,7 @@ $validator = $validator
                 ->loadData([...]);
 ```
 
-### Validate
-#### Execute validation
+### Execute validation
 
 ```php
 $isValid = $validator->validate();
@@ -150,13 +148,12 @@ You have an ability to perform a single value validation, without calling `setRu
 ```php
 $validator = new Validator();
 $password = $_POST['password'];
-$isValid = $validator->validateFor('password', $password, ['min'=>6, 'max'=>20]);
+$isValid = $validator->validateFor('string', $password, ['min'=>6, 'max'=>20]);
 ```
 
 In this case, `validateFor()` will return result of `validate()` method.
 
-### Fetch errors
-#### Get an array with error messages
+### Fetch error messages
  
 ```php
 if($validator->hasErrors()) {

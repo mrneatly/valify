@@ -8,7 +8,7 @@
 
 use valify\Validator;
 
-require 'vendor/Autoload.php';
+require 'vendor/autoload.php';
 $validator = new Validator();
 
 // require "your/own/path/to/ValidatorClass.php";

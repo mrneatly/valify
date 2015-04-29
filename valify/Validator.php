@@ -2,8 +2,6 @@
 
 namespace valify;
 
-require_once "validators/AbstractValidator.php";
-
 class Validator {
     private $_errors = [];
     private $_rules = [];
@@ -150,9 +148,6 @@ class Validator {
 
         if( isset($this->_builtInValidators[$validatorName]) ) {
             $namespace = $this->_builtInValidators[$validatorName];
-            $className = substr($namespace, strrpos($namespace, '\\')+1);
-
-            require_once 'validators/' . $className . '.php';
             $validator = new $namespace($attribute, $value);
         } elseif( strpos($validatorName, '\\') !== false ) { # Means that validator name is matched as a namespace
             $validator = new $validatorName($attribute, $value);
@@ -162,6 +157,7 @@ class Validator {
         }
 
         if( isset($validator) ) {
+            /** @var $validator validators\AbstractValidator */
             $validator = $this->setValidatorProperties($validator, $rule);
 
             $validator->init();
