@@ -35,15 +35,10 @@ class RequiredValidator extends AbstractValidator {
     protected function validateValue($value) {
         if ($this->requiredValue === null) {
             $value = is_string($value) ? trim($value) : $value;
-            if ($this->strict && $value !== null || !$this->strict && !empty($value)) {
-                return null;
+            if ($this->strict && $value === null || !$this->strict && empty($value)) {
+                $this->addError($this->message);
             }
-        } elseif (!$this->strict && $value == $this->requiredValue || $this->strict && $value === $this->requiredValue) {
-            return null;
-        }
-        if ($this->requiredValue === null) {
-            $this->addError($this->message);
-        } else {
+        } elseif (!$this->strict && $value != $this->requiredValue || $this->strict && $value !== $this->requiredValue) {
             $this->addError($this->message, ['{requiredValue}' => $this->requiredValue]);
         }
     }

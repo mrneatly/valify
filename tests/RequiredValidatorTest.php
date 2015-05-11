@@ -2,33 +2,41 @@
 
 namespace tests;
 
+use valify\Validator;
+
 class RequiredValidatorTest extends \PHPUnit_Framework_TestCase {
-    public function testEmpty()
+    public function testIsEmptyValid()
     {
-        $stack = array();
-        $this->assertEmpty($stack);
+        $isValid = Validator::validateFor('required', '');
 
-        return $stack;
+        $this->assertFalse($isValid);
     }
 
-    /**
-     * @depends testEmpty
-     */
-    public function testPush(array $stack)
+    public function testIsEmptyValidUsingStrictComparison()
     {
-        array_push($stack, 'foo');
-        $this->assertEquals('foo', $stack[count($stack)-1]);
-        $this->assertNotEmpty($stack);
+        $isValid = Validator::validateFor('required', '', ['strict'=>true]);
 
-        return $stack;
+        $this->assertTrue($isValid);
     }
 
-    /**
-     * @depends testPush
-     */
-    public function testPop(array $stack)
+    public function testAreSpacesValid()
     {
-        $this->assertEquals('foo', array_pop($stack));
-        $this->assertEmpty($stack);
+        $isValid = Validator::validateFor('required', '    ');
+
+        $this->assertFalse($isValid);
+    }
+
+    public function testIsEqualToRequiredValue()
+    {
+        $isValid = Validator::validateFor('required', '1', ['requiredValue'=>1]);
+
+        $this->assertTrue($isValid);
+    }
+
+    public function testIsEqualToRequiredValueUsingStrictComparison()
+    {
+        $isValid = Validator::validateFor('required', '1', ['requiredValue'=>1, 'strict'=>true]);
+
+        $this->assertFalse($isValid);
     }
 }
