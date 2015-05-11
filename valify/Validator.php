@@ -7,21 +7,20 @@ class Validator {
     private $_rules = [];
     private $_data = [];
     private $_builtInValidators = [
-        'required' => '\valify\validators\RequiredValidator',
-        'string'   => '\valify\validators\StringValidator',
-        'email'    => '\valify\validators\EmailValidator',
         'boolean'  => '\valify\validators\BooleanValidator',
         'compare'  => '\valify\validators\CompareValidator',
         'date'     => '\valify\validators\DateValidator',
         'default'  => '\valify\validators\DefaultValueValidator',
-        'double'   => '\valify\validators\NumberValidator',
-        'exist'    => '\valify\validators\ExistValidator',
+        'email'    => '\valify\validators\EmailValidator',
         'file'     => '\valify\validators\FileValidator',
         'image'    => '\valify\validators\ImageValidator',
         'in'       => '\valify\validators\RangeValidator',
-        'integer'  => '\valify\validators\NumberValidator',
         'match'    => '\valify\validators\RegularExpressionValidator',
         'number'   => '\valify\validators\NumberValidator',
+        'phone'    => '\valify\validators\PhoneValidator',
+        'required' => '\valify\validators\RequiredValidator',
+        'string'   => '\valify\validators\StringValidator',
+        'unique'   => '\valify\validators\UniqueValidator',
         'url'      => '\valify\validators\UrlValidator',
     ];
 

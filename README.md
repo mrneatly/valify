@@ -175,6 +175,7 @@ the last message of the corresponding attribute error stack (array).
 * file
 * required
 * string
+* url
 
 For detailed parameter description of each validator, see class methods in valify/validators.
 
