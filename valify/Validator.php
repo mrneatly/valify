@@ -32,22 +32,28 @@ class Validator {
      * @param $name string - Name of validator
      * @param $value mixed - Value to validate. If array,
      * all keys are taken as attributes and values as values.
-     * @param array $params array - Params for a validator
+     * @param $params array - Params for a validator
      * @return bool
      * @throws \Exception
      */
-    function validateFor($name, $value, $params = []) {
+    public static function validateFor($name, $value, $params = []) {
         $rules = [];
+        # By default, empty value must be checked too
+        $params = array_merge(['allowEmpty'=>false], $params);
 
         if( is_array($value) ) {
             foreach ($value as $attr => $val)
-                $rules[] = [$attr, $name, $params];
+                $rules[] = array_merge([$attr, $name], $params);
         } else {
-            $rules[] = [$name, $name, $params];
+            $rules[] = array_merge([$name, $name], $params);
             $value = [$name => $value];
         }
 
-        return $this->setRules($rules)->loadData($value)->validate();
+        $v = new Validator();
+        $isValid = $v->setRules($rules)->loadData($value)->validate();
+        unset($v);
+
+        return $isValid;
     }
 
     /**
@@ -113,7 +119,8 @@ class Validator {
 
     /**
      * After using validate(), we can
-     * just check, if there are any errors
+     * simply check, if there are any errors
+     *
      * @return bool
      */
     public function hasErrors() {
@@ -129,6 +136,7 @@ class Validator {
 
     /**
      * Get error of a particular attribute
+     *
      * @param $attribute
      * @return array|null
      */
@@ -154,6 +162,7 @@ class Validator {
             foreach ($data as $attr => $val) {
                 $validator->setAttributeAndValue($attr, $val);
                 $validator->init();
+
                 if( $validator->gotErrors() )
                     $this->setErrorStack($validator->fetchErrors());
             }

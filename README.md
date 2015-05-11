@@ -146,9 +146,8 @@ $isValid = $validator->validate();
 You have an ability to perform a single value validation, without calling `setRules()` and `loadData()`:
 
 ```php
-$validator = new Validator();
 $password = $_POST['password'];
-$isValid = $validator->validateFor('string', $password, ['min'=>6, 'max'=>20]);
+$isValid = Validator::validateFor('string', $password, ['min'=>6, 'max'=>20]);
 ```
 
 In this case, `validateFor()` will return result of `validate()` method.
