@@ -22,7 +22,7 @@ use valify\Validator;
 There is also a more straightforward way to install this framework through the compser.
 In your project root, issue next command in terminal:
 
-`php composer.phar require xphoenyx/valify 1.5.2`
+`php composer.phar require xphoenyx/valify 1.6.1`
 
 Now you are ready to validate your data.
 
