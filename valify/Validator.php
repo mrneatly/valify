@@ -32,7 +32,7 @@ class Validator {
      * @param $value mixed - Value to validate. If array,
      * all keys are taken as attributes and values as values.
      * @param $params array - Params for a validator
-     * @return bool
+     * @return object
      * @throws \Exception
      */
     public static function validateFor($name, $value, $params = []) {
@@ -49,10 +49,14 @@ class Validator {
         }
 
         $v = new Validator();
-        $isValid = $v->setRules($rules)->loadData($value)->validate();
+        $result = new \stdClass();
+        $result->isValid = $v->setRules($rules)->loadData($value)->validate();
+        $result->errors = $v->getErrors();
+//        $isValid = $v->setRules($rules)->loadData($value)->validate();
         unset($v);
 
-        return $isValid;
+//        return $isValid;
+        return $result;
     }
 
     /**
