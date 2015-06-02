@@ -150,7 +150,9 @@ $password = $_POST['password'];
 $isValid = Validator::validateFor('string', $password, ['min'=>6, 'max'=>20]);
 ```
 
-In this case, `validateFor()` will return result of `validate()` method.
+In this case, `validateFor()` will return an object with two properties:
+- `isValid` - contains boolean value;
+- `errors` - contains all error messages, related to validation;
 
 ### Fetch error messages
  
