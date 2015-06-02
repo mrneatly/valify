@@ -41,8 +41,11 @@ class Validator {
         $params = array_merge(['allowEmpty'=>false], $params);
 
         if( is_array($value) ) {
-            foreach ($value as $attr => $val)
+            $attrCounter = 0;
+            foreach ($value as $attr => $val) {
+                $attr = empty($attr) ? $name . $attrCounter++ : $attr;
                 $rules[] = array_merge([$attr, $name], $params);
+            }
         } else {
             $rules[] = array_merge([$name, $name], $params);
             $value = [$name => $value];
@@ -75,8 +78,6 @@ class Validator {
                 throw new \UnexpectedValueException("Every rule must be provided as an array");
         }
 
-        //TODO Rules could be set in JSON
-
         $this->_rules = array_merge($this->_rules, $rules);
         return $this;
     }
@@ -91,8 +92,6 @@ class Validator {
     public function loadData($data = []) {
         if( !is_array($data) )
             throw new \InvalidArgumentException("Data must be provided as an array");
-
-        //TODO Data could be set in JSON
 
         $this->_data = array_merge($this->_data, $data);
         return $this;

@@ -18,49 +18,36 @@ class StringValidatorTest extends \PHPUnit_Framework_TestCase {
             null
         ];
 
-        $validator = $this->validator->setRules([[array_keys($data), 'string']]);
+        $isValid = Validator::validateFor('string', $data)->isValid;
 
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
-    public function testStringLengthIsNotEqual()
+    public function testIsStringWithLengthOutOfProperLengthValid()
     {
-        $data = ['123qwe456rty'];
+        $isValid = Validator::validateFor('string', '123qwe456rty', ['length'=>6])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'string', 'length'=>6]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
-    public function testStringLengthIsTooLong()
+    public function testIsTooLongStringValid()
     {
-        $data = ['123qwe456rty'];
+        $isValid = Validator::validateFor('string', '123qwe456rty', ['max'=>6])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'string', 'max'=>6]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
-    public function testStringLengthIsTooShort()
+    public function testIsTooShortStringValid()
     {
-        $data = ['123qwe456rty'];
+        $isValid = Validator::validateFor('string', '123qwe456rty', ['min'=>50])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'string', 'min'=>60]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
-    public function testStringIsValid()
+    public function testIsStringValidWithRestrictions()
     {
-        $data = ['123qwe456rty'];
+        $isValid = Validator::validateFor('string', '123qwe456rty', ['min'=>6, 'max'=>20])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'string', 'min'=>6, 'max'=>20]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 }

@@ -18,6 +18,7 @@ class EmailValidator extends AbstractValidator {
     public $DNSIsNotValid = '{domain} does not exist or does not have A or MX record';
 
     protected function validateValue($value) {
+//        echo "<pre>";print_r($value);echo "</pre>";
         if (!is_string($value) || strlen($value) >= 320) {
             $this->addError($this->message);
         } elseif ( !preg_match('/^(.*<?)(.*)@(.*?)(>?)$/', $value, $matches) ) {

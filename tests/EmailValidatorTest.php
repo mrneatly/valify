@@ -1,15 +1,12 @@
 <?php
 
+namespace tests;
+
 use valify\Validator;
 
 class EmailValidatorTest extends \PHPUnit_Framework_TestCase {
-    private $validator;
 
-    function setUp() {
-        $this->validator = new Validator();
-    }
-
-    public function testEverythingButTheStringIsNotValid()
+    public function testIsInvalidInputTypeValid()
     {
         $data = [
             123456789,
@@ -18,10 +15,9 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase {
             null
         ];
 
-        $validator = $this->validator->setRules([[array_keys($data), 'email']]);
+        $isValid = Validator::validateFor('email', $data)->isValid;
 
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
     public function testIsRegExpWorkingProperly() {
@@ -30,31 +26,20 @@ class EmailValidatorTest extends \PHPUnit_Framework_TestCase {
             'address@gmail',
         ];
 
-        $validator = $this->validator->setRules([[array_keys($data), 'email']]);
+        $isValid = Validator::validateFor('email', $data)->isValid;
 
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
     public function testIsDnsFake() {
-        $data = [
-            'address@fakedns.eu',
-        ];
+        $isValid = Validator::validateFor('email', 'address@fakedns.eu', ['checkDNS'=>true])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'email', 'checkDNS'=>true]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
     public function testIsEmailValid() {
-        $data = [
-            'address@gmail.com',
-        ];
+        $isValid = Validator::validateFor('email', 'address@gmail.com', ['checkDNS'=>true])->isValid;
 
-        $validator = $this->validator->setRules([[array_keys($data), 'email', 'checkDNS'=>true]]);
-
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 }

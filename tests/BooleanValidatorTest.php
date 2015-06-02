@@ -1,59 +1,51 @@
 <?php
 
+namespace tests;
+
 use valify\Validator;
 
 class BooleanValidatorTest extends \PHPUnit_Framework_TestCase {
-    private $validator;
 
-    function setUp() {
-        $this->validator = new Validator();
-    }
-
-    public function testStringsOneAndZeroAreBoolTrue()
+    public function testStringIsValid()
     {
-        $validator = $this->validator->setRules([[['bool1', 'bool2'], 'boolean']]);
+        $isValid = Validator::validateFor('boolean', ['bool1'=>'1', 'bool2'=>'0'])->isValid;
 
-        $isValid = $validator->loadData(['bool1'=>'1', 'bool2'=>'0'])->validate();
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 
-    public function testIntOneAndZeroAreBoolTrue()
+    public function testIntIsValid()
     {
-        $validator = $this->validator->setRules([[['bool1', 'bool2'], 'boolean']]);
+        $isValid = Validator::validateFor('boolean', ['bool1'=>1, 'bool2'=>0])->isValid;
 
-        $isValid = $validator->loadData(['bool1'=>1, 'bool2'=>0])->validate();
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 
-    public function testStrictStringOneAndZeroAreBoolTrue()
+    public function testStrictStringIsValid()
     {
-        $validator = $this->validator->setRules([[['bool1', 'bool2'], 'boolean', 'strict'=>true]]);
+        $isValid = Validator::validateFor('boolean', ['bool1'=>'1', 'bool2'=>'0'], ['strict'=>true])->isValid;
 
-        $isValid = $validator->loadData(['bool1'=>'1', 'bool2'=>'0'])->validate();
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 
-    public function testStrictIntOneAndZeroAreNotValid()
+    public function testStrictIntIsValid()
     {
-        $validator = $this->validator->setRules([[['bool1', 'bool2'], 'boolean', 'strict'=>true]]);
+        $isValid = Validator::validateFor('boolean', ['bool1'=>1, 'bool2'=>0], ['strict'=>true])->isValid;
 
-        $isValid = $validator->loadData(['bool1'=>1, 'bool2'=>0])->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
-    public function testAnythingElseIsNotValid()
+    public function testStrictAnythingElseIsValid()
     {
         $data = [
             'notBool1'=>'bar',
             'notBool2'=>2,
             'notBool3'=>123.456,
             'notBool4'=>true,
-            'notBool7'=>null
+            'notBool5'=>null
         ];
 
-        $validator = $this->validator->setRules([[array_keys($data), 'boolean']]);
+        $isValid = Validator::validateFor('boolean', $data, ['strict'=>true])->isValid;
 
-        $isValid = $validator->loadData($data)->validate();
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 }
