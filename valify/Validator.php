@@ -6,6 +6,7 @@ class Validator {
     private $_errors = [];
     private $_rules = [];
     private $_data = [];
+    private $_currentValidator;
     private $_builtInValidators = [
         'boolean'  => '\valify\validators\BooleanValidator',
         'compare'  => '\valify\validators\CompareValidator',
@@ -35,9 +36,9 @@ class Validator {
      * @return object
      * @throws \Exception
      */
-    public static function validateFor($name, $value, $params = []) {
+    public static function validateFor($name, $value, array $params = []) {
         $rules = [];
-        # By default, empty value must be checked too
+        # By default, empty value should be not valid
         $params = array_merge(['allowEmpty'=>false], $params);
 
         if( is_array($value) ) {
@@ -55,10 +56,8 @@ class Validator {
         $result = new \stdClass();
         $result->isValid = $v->setRules($rules)->loadData($value)->validate();
         $result->errors = $v->getErrors();
-//        $isValid = $v->setRules($rules)->loadData($value)->validate();
         unset($v);
 
-//        return $isValid;
         return $result;
     }
 
@@ -69,10 +68,7 @@ class Validator {
      * @param array $rules
      * @return $this
      */
-    public function setRules($rules = []) {
-        if( !is_array($rules) )
-            throw new \InvalidArgumentException("Rules must be provided as an array");
-
+    public function setRules(array $rules = []) {
         foreach ($rules as $rule) {
             if( !is_array($rule) )
                 throw new \UnexpectedValueException("Every rule must be provided as an array");
@@ -89,10 +85,7 @@ class Validator {
      * @param array $data
      * @return $this
      */
-    public function loadData($data = []) {
-        if( !is_array($data) )
-            throw new \InvalidArgumentException("Data must be provided as an array");
-
+    public function loadData(array $data = []) {
         $this->_data = array_merge($this->_data, $data);
         return $this;
     }
@@ -101,6 +94,12 @@ class Validator {
      * @return bool
      */
     public function validate() {
+        # Sort rules by validator name
+        usort($this->_rules, function ($a, $b) {
+            if ($a[1] == $b[1]) return 0;
+            return ($a[1] < $b[1]) ? -1 : 1;
+        });
+
         foreach ($this->_rules as $rule) {
             $attribute = array_shift($rule);
             $validatorName = array_shift($rule);
@@ -149,9 +148,9 @@ class Validator {
     private function callValidator($validator, $data, $rule = []) {
         if( isset($this->_builtInValidators[$validator]) ) {
             $namespace = $this->_builtInValidators[$validator];
-            $validator = new $namespace();
-        } elseif( strpos($validator, '\\') !== false ) { # Validator name is matched as a namespace
-            $validator = new $validator();
+            $validator = $this->loadValidator($namespace);
+        } elseif( strpos($validator, '\\') !== false ) { # Validator name is a namespace
+            $validator = $this->loadValidator($validator);
 
             if( !is_subclass_of($validator, '\valify\validators\AbstractValidator', false) )
                 throw new \DomainException("Validator " . get_class($validator) . " must extend \\valify\\validators\\AbstractValidator class");
@@ -171,6 +170,20 @@ class Validator {
         } else {
             throw new \UnexpectedValueException("Validator " . get_class($validator) . " not found");
         }
+    }
+
+    private function loadValidator($name) {
+        $currentValidatorName = trim(get_class($this->_currentValidator), '\\');
+        $name = trim($name, '\\');
+
+        if(!$this->_currentValidator || $currentValidatorName !== $name) {
+            $validator = new $name();
+            $this->_currentValidator = $validator;
+        } else {
+            $validator = $this->_currentValidator;
+        }
+
+        return $validator;
     }
 
     private function setValidatorProperties($obj, $params) {
