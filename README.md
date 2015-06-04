@@ -87,7 +87,7 @@ You can access attribute name and its value in `message` by using so-called 'pat
 ['email', 'email', 'message'=>'{value} for attribute "{attribute}" is not a valid email'],
 ```
 
-*NB! In case you want to show value in error message, you must check first if it can be represented as a string.* 
+*NB! If the value is not representable as a string, value type will be shown instead of value itself* 
 
 You can also implement your own validators by extending `valify\validator\AbstractValidator` class. 
 In this case, if you are not using composer autoloader, you should also import (require) AbstractValidator.
@@ -101,7 +101,7 @@ $rules = [
 ];
 ```
 
-Do not forget to import your validator before defining a namespace in rules.
+Make sure your validator is loaded before defining a namespace in rules.
 Refer to the `valify\validators\ExampleValidator` for detailed implementation info.
 
 ### Define data to be validated

@@ -44,7 +44,7 @@ class Validator {
         if( is_array($value) ) {
             $attrCounter = 0;
             foreach ($value as $attr => $val) {
-                $attr = empty($attr) ? $name . $attrCounter++ : $attr;
+                $attr = empty($attr) ? $name . '_attribute_' . $attrCounter++ : $attr;
                 $rules[] = array_merge([$attr, $name], $params);
             }
         } else {
@@ -55,7 +55,7 @@ class Validator {
         $v = new Validator();
         $result = new \stdClass();
         $result->isValid = $v->setRules($rules)->loadData($value)->validate();
-        $result->errors = $v->getErrors();
+        $result->error = $v->getError($name);
         unset($v);
 
         return $result;
@@ -70,8 +70,8 @@ class Validator {
      */
     public function setRules(array $rules = []) {
         foreach ($rules as $rule) {
-            if( !is_array($rule) )
-                throw new \UnexpectedValueException("Every rule must be provided as an array");
+            if( !is_array($rule) || count($rule) < 2 )
+                throw new \UnexpectedValueException("Every rule must be provided as an array and must include validator name and value attribute");
         }
 
         $this->_rules = array_merge($this->_rules, $rules);
@@ -189,6 +189,8 @@ class Validator {
     private function setValidatorProperties($obj, $params) {
         foreach ($params as $prop => $value)
             $obj->$prop = $value;
+
+        $obj->_data = $this->_data;
 
         return $obj;
     }

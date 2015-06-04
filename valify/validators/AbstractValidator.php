@@ -4,6 +4,8 @@ namespace valify\validators;
 
 abstract class AbstractValidator {
     public $allowEmpty = true;
+    public $_data = [];
+    public $message;
     protected $attribute;
     protected $value;
     private $_errors = [];
@@ -26,7 +28,7 @@ abstract class AbstractValidator {
      */
     public function setAttributeAndValue($attribute, $value) {
         $this->attribute = $attribute;
-        $this->value    = $value;
+        $this->value     = $value;
     }
 
     /**
@@ -51,12 +53,14 @@ abstract class AbstractValidator {
      * @param array $params
      */
     protected function addError($msg, $params = []) {
-        $value = $this->isEchoable($this->value) ? $this->value : '';
-
         $params = array_merge([
             '{attribute}' => $this->attribute,
-            '{value}'     => $value,
+            '{value}'     => $this->value,
         ], $params);
+
+        foreach ($params as $template => $value)
+            $params[$template] = $this->isPrintable($value) ? $value : gettype($value);
+
         $msg = str_replace(array_keys($params), array_values($params), $msg);
 
         $this->_errors[$this->attribute][] = $msg;
@@ -78,20 +82,20 @@ abstract class AbstractValidator {
         return !empty($this->_errors);
     }
 
-    public function isEchoable($value) {
-        return (is_string($value) || is_numeric($value));
+    public function isPrintable($value) {
+        return ( is_string($value) || is_numeric($value) );
     }
 
     public function isEmpty($value) {
         $empty = true;
 
-        if (is_string($value) || is_numeric($value)) {
+        if ( is_string($value) || is_numeric($value) ) {
             $empty = empty($value);
-        } elseif(is_object($value)) {
-            $empty = $this->isEmpty(get_object_vars($value));
-        } elseif(is_array($value)) {
+        } elseif( is_object($value) ) {
+            $empty = $this->isEmpty( get_object_vars($value) );
+        } elseif( is_array($value) ) {
             foreach ($value as $key => $val) {
-                if(!$this->isEmpty($val)) {
+                if( !$this->isEmpty($val) ) {
                     $empty = false;
                     break;
                 }
