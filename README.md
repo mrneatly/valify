@@ -158,7 +158,7 @@ $values = [
     $_POST['first_name'],
     $_POST['password'],
 ];
-$isValid = Validator::validateFor('string', $password, ['min'=>3, 'max'=>30]);
+$isValid = Validator::validateFor('string', $values, ['min'=>3, 'max'=>30]);
 ```
 
 `validateFor()` will return an object with two properties:
