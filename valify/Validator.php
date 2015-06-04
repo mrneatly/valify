@@ -37,16 +37,15 @@ class Validator {
      * @throws \Exception
      */
     public static function validateFor($name, $value, array $params = []) {
+        if( !is_string($name) )
+            throw new \UnexpectedValueException("Validator name must be a string, " . gettype($name) . " given");
+
         $rules = [];
         # By default, empty value should be not valid
         $params = array_merge(['allowEmpty'=>false], $params);
 
         if( is_array($value) ) {
-            $attrCounter = 0;
-            foreach ($value as $attr => $val) {
-                $attr = empty($attr) ? $name . '_attribute_' . $attrCounter++ : $attr;
-                $rules[] = array_merge([$attr, $name], $params);
-            }
+            $rules[] = array_merge([array_keys($value), $name], $params);
         } else {
             $rules[] = array_merge([$name, $name], $params);
             $value = [$name => $value];
@@ -55,7 +54,8 @@ class Validator {
         $v = new Validator();
         $result = new \stdClass();
         $result->isValid = $v->setRules($rules)->loadData($value)->validate();
-        $result->error = $v->getError($name);
+        $result->lastError = $v->getLastError();
+        $result->errors = $v->getErrors();
         unset($v);
 
         return $result;
@@ -72,6 +72,9 @@ class Validator {
         foreach ($rules as $rule) {
             if( !is_array($rule) || count($rule) < 2 )
                 throw new \UnexpectedValueException("Every rule must be provided as an array and must include validator name and value attribute");
+
+            if( !is_string($rule[1]) )
+                throw new \UnexpectedValueException("Validator name must be a string, " . gettype($rule[1]) . " given");
         }
 
         $this->_rules = array_merge($this->_rules, $rules);
@@ -129,6 +132,9 @@ class Validator {
     }
 
     /**
+     * Get all error messages, or the only ones
+     * for a particular attribute, if it is defined
+     *
      * @return array
      */
     public function getErrors($attribute = null) {
@@ -136,13 +142,23 @@ class Validator {
     }
 
     /**
-     * Get error of a particular attribute
+     * Get a single error message for a particular attribute
      *
      * @param $attribute
      * @return array|null
      */
-    public function getError($attribute = null) {
+    public function getError($attribute) {
         return isset($this->_errors[$attribute]) ? $this->_errors[$attribute][0] : null;
+    }
+
+    /**
+     * @return null
+     */
+    public function getLastError() {
+        $errors = array_values($this->_errors);
+        if( isset($errors[0][0]) )
+            return $errors[0][0];
+        return null;
     }
 
     private function callValidator($validator, $data, $rule = []) {

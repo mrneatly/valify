@@ -150,9 +150,21 @@ $password = $_POST['password'];
 $isValid = Validator::validateFor('string', $password, ['min'=>6, 'max'=>20]);
 ```
 
-In this case, `validateFor()` will return an object with two properties:
+For multiple value validation, pass an array of desired values as a second argument:
+
+```php
+$values = [
+    $_POST['username'],
+    $_POST['first_name'],
+    $_POST['password'],
+];
+$isValid = Validator::validateFor('string', $password, ['min'=>3, 'max'=>30]);
+```
+
+`validateFor()` will return an object with two properties:
 - `isValid` - contains boolean value;
-- `errors` - contains all error messages, related to validation;
+- `lastError` - contains last validation error message;
+- `errors` - contains whole error message stack for validating attribute;
 
 ### Fetch error messages
  
@@ -181,6 +193,7 @@ the last message of the corresponding attribute error stack (array).
 * phone
 * in
 * number
+* compare
 
 For detailed parameter description of each validator, see class methods in valify/validators.
 

@@ -17,11 +17,11 @@ abstract class AbstractValidator {
     function __construct() {}
 
     /**
-     * For better performance purposes, object of each validator
-     * is created once, but can accept attribute => value pairs.
-     * This is made to avoid creating validator object from scratch
-     * for each value. In order to correctly handle each pair,
-     * only this and init() methods are called in cycle.
+     * Called by Validator class, when loading new validator.
+     * For better performance, only a single validator object
+     * is created for all values, that should be validated
+     * through this validator. So, if object has already been
+     * created, we only need to load attribute and value into it.
      *
      * @param $attribute
      * @param $value
