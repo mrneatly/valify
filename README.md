@@ -77,6 +77,7 @@ $rules = [
     [['username', 'password'], 'string', 'max'=>10],
     ['email', 'email', 'message'=>'Please provide a valid email'],
     ['remember_me', 'boolean']
+    /* ... */
 ];
 ```
 
@@ -114,6 +115,7 @@ $data = [
     'password'=>'123qwe',
     'email'=>'address@gmail.com',
     'remember_me'=>'1',
+    /* ... */
 ];
 ```
 
@@ -194,6 +196,7 @@ the last message of the corresponding attribute error stack (array).
 * in
 * number
 * compare
+* unique
 
 For detailed parameter description of each validator, see class methods in valify/validators.
 
