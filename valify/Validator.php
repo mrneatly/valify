@@ -215,4 +215,8 @@ class Validator {
         foreach ($errors as $attr => $msgs)
             $this->_errors[$attr] = $msgs;
     }
+
+    public function cleanErrors() {
+        $this->_errors = [];
+    }
 }
