@@ -189,7 +189,9 @@ class Validator {
     }
 
     private function loadValidator($name) {
-        $currentValidatorName = trim(get_class($this->_currentValidator), '\\');
+        $currentValidatorName = is_object($this->_currentValidator)
+		    ? trim(get_class($this->_currentValidator), '\\')
+	        : null;
         $name = trim($name, '\\');
 
         if(!$this->_currentValidator || $currentValidatorName !== $name) {
