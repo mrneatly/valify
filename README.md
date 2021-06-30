@@ -1,3 +1,5 @@
+__*NB! This project is archived thus not maintained anymore*__
+
 # Valify
 A little framework for user input validation. It is still in development, so keep an eye on commits. 
 Inspired by [Yii2 input validation implementation](https://github.com/yiisoft/yii2/blob/master/docs/guide/input-validation.md).
